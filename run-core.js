@@ -6,7 +6,9 @@ const Wechat = require('./src/wechat.js')
 const qrcode = require('qrcode-terminal')
 const fs = require('fs')
 const request = require('request')
-const dicebot = require('./src/botscripts/dicebot.ts')
+const Dicebot = require('./src/botscripts/dicebot.ts')
+
+let dicebot = new Dicebot()
 
 let bot
 /**ts
@@ -269,7 +271,7 @@ bot.on('message', msg => {
   if (msg.MsgType == bot.CONF.MSGTYPE_TEXT 
     && msg.isSendBySelf == false
     ) {
-    dicebot.Dispatch(()=> msg.Content,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
+    dicebot.Dispatch(()=> msg.OriginalContent,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
   }
 })
 /**
