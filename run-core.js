@@ -183,14 +183,14 @@ bot.on('message', msg => {
    * 获取消息发送者的显示名
    */
   //console.log(bot.contacts[msg.FromUserName].getDisplayName())
-  console.log(msg)
+  //console.log(msg)
   if(msg.FromUserName.indexOf('@@') === 0) {
     msg.OriginalContent.match(/@.*?(?=:)/g).forEach(match => {
       let user = bot.contacts[msg.FromUserName].MemberList.find(member => {
         return member.UserName === match
       })
     //console.log(bot.contacts[msg.FromUserName].MemberList)
-    //console.log(bot.Contact.getDisplayName(user))
+    console.log(bot.Contact.getDisplayName(user))
     })
   }
   /**
@@ -269,9 +269,9 @@ bot.on('message', msg => {
 
 bot.on('message', msg => {
   if (msg.MsgType == bot.CONF.MSGTYPE_TEXT 
-    && msg.isSendBySelf == false
+    //&& msg.isSendBySelf == false
     ) {
-    dicebot.Dispatch(()=> msg.OriginalContent,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
+    dicebot.Dispatch(()=> msg.Content,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
   }
 })
 /**
