@@ -4,7 +4,7 @@
   "description": "web wechat lib for user",
   "main": "lib/wechat.js",
   "scripts": {
-    "compile": "babel src -d lib -s",
+    "compile": "babel --extensions \".ts,.js\" src -d lib -s",
     "prepublish": "npm run compile",
     "lint": "eslint src",
     "clean": "rm -rf lib",
@@ -31,9 +31,14 @@
   },
   "homepage": "https://github.com/nodeWechat/wechat4u#readme",
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.16.3",
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
+    "@babel/register": "^7.22.15",
+    "@types/node": "^20.8.9",
+    "@types/qrcode-terminal": "^0.12.1",
+    "@types/request": "^2.48.11",
     "chai": "^3.5.0",
     "cross-env": "^1.0.7",
     "eslint": "^5.14.1",
@@ -44,6 +49,7 @@
     "nock": "^10.0.6",
     "qrcode-terminal": "^0.11.0",
     "replay": "^2.0.6",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "typescript": "^5.2.2"
   }
 }

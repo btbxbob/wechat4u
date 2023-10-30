@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "NodeNext",
+        "declaration": true,
+        "outDir": "./lib",
+        "strict": true,
+        "esModuleInterop": true,
+        "lib": ["esnext"],
+        "noEmit": true,
+        "isolatedModules": true,
+        "moduleResolution": "nodenext",
+        "allowImportingTsExtensions": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "**/*.test.ts"]
+}

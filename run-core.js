@@ -1,12 +1,15 @@
 'use strict'
-require('babel-register')
+require("@babel/register")({
+  extensions: [ ".js", ".ts"],
+})
 const Wechat = require('./src/wechat.js')
 const qrcode = require('qrcode-terminal')
 const fs = require('fs')
 const request = require('request')
+const dicebot = require('./src/botscripts/dicebot.ts')
 
 let bot
-/**
+/**ts
  * 尝试获取本地登录数据，免扫码
  * 这里演示从本地文件中获取数据
  */
@@ -36,9 +39,9 @@ bot.on('uuid', uuid => {
 /**
  * 登录用户头像事件，手机扫描后可以得到登录用户头像的Data URL
  */
-bot.on('user-avatar', avatar => {
-  console.log('登录用户头像Data URL：', avatar)
-})
+// bot.on('user-avatar', avatar => {
+//   console.log('登录用户头像Data URL：', avatar)
+// })
 /**
  * 登录成功事件
  */
@@ -59,7 +62,7 @@ bot.on('logout', () => {
  * 联系人更新事件，参数为被更新的联系人列表
  */
 bot.on('contacts-updated', contacts => {
-  console.log(contacts)
+  // console.log(contacts)
   console.log('联系人数量：', Object.keys(bot.contacts).length)
 })
 /**
@@ -177,7 +180,17 @@ bot.on('message', msg => {
   /**
    * 获取消息发送者的显示名
    */
-  console.log(bot.contacts[msg.FromUserName].getDisplayName())
+  //console.log(bot.contacts[msg.FromUserName].getDisplayName())
+  console.log(msg)
+  if(msg.FromUserName.indexOf('@@') === 0) {
+    msg.OriginalContent.match(/@.*?(?=:)/g).forEach(match => {
+      let user = bot.contacts[msg.FromUserName].MemberList.find(member => {
+        return member.UserName === match
+      })
+    //console.log(bot.contacts[msg.FromUserName].MemberList)
+    //console.log(bot.Contact.getDisplayName(user))
+    })
+  }
   /**
    * 判断消息类型
    */
@@ -249,6 +262,14 @@ bot.on('message', msg => {
       break
     default:
       break
+  }
+})
+
+bot.on('message', msg => {
+  if (msg.MsgType == bot.CONF.MSGTYPE_TEXT 
+    && msg.isSendBySelf == false
+    ) {
+    dicebot.Dispatch(()=> msg.Content,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
   }
 })
 /**
