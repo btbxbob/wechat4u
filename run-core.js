@@ -271,7 +271,7 @@ bot.on('message', msg => {
   if (msg.MsgType == bot.CONF.MSGTYPE_TEXT 
     //&& msg.isSendBySelf == false
     ) {
-    dicebot.Dispatch(()=> msg.Content,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
+    dicebot.Dispatch(()=> msg,(msgContent)=>{bot.sendMsg(msgContent, msg.FromUserName)})
   }
 })
 /**
