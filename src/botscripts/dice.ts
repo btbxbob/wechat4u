@@ -1,12 +1,19 @@
-class Dice {
-    sides: number;
+import IDice from "./IDice";
+class Dice implements IDice {
 
-    constructor(sides: number) {
-        this.sides = sides;
+    constructor() {
     }
 
-    roll(): number {
-        return Math.floor(Math.random() * this.sides) + 1;
+    check(reader: Function): boolean {
+        return false;
+    }
+
+    proccess(reader: Function, sender: Function): void {
+        
+    }
+
+    roll(sides:number): number {
+        return Math.floor(Math.random() * sides) + 1;
     }
 }
 
