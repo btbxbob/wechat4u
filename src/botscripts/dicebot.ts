@@ -12,7 +12,7 @@ export default class Dicebot {
     Dispatch(reader: Function, sender: Function) {
         console.log("Dicebot dispatching")
         let msg=reader()
-        let result=msg.Content.match(/(?:(.*?)\n)?([\.\/]roll\s+([1-9]\d*))(?:\s+(\w*))*/mi)
+        let result=msg.Content.match(/(?:(.*?):\n)?([\.\/]roll\s+([1-9]\d*))(?:\s+(\S*))*/im)
         if(result){
             console.log(result)
             let dice=new Dice()
