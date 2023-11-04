@@ -23,29 +23,30 @@ class DndDice implements IDice{
             let rollResult:number=0
             let rollDetailed:string=""
             let name = result.groups.name
-            let timeString=new Date(msg.CreateTime*1000).toTimeString()
+            let timeString=new Date(msg.CreateTime*1000).toTimeString().substring(0,8)
             let command = result.groups.command
             //command: .r 1d20+5d6+3
-            let comment = result.groups.comment
+            let comment = result.groups.comment?result.groups.comment:""
             let regexCommand = /[\.\/]r\s+(?<firstdice>(\d+)*d(\d+)(?:(\+(\d+)*d(\d+))|([+-]\d+))*)/im
             //处理第一个骰子
             let firstdice = regexCommand.exec(command)?.groups?.firstdice
             let firstdiceresult=firstdice?.match(/(?<number>\d+)*d(?<faces>\d+)/im)
             let number = firstdiceresult?.groups?.number?Number(firstdiceresult?.groups?.number):1;
             for(let i=0;i<number;i++){
-                let roll = this.roll(Number(firstdiceresult?.groups?.faces))
-                rollResult = rollResult + roll
-                rollDetailed = String(roll)
+                let roll:number = this.roll(Number(firstdiceresult?.groups?.faces))
+                rollResult = rollResult+roll
+                
             }
-            let regexAddDices = /((\+(\d+)*d(\d+))|([+-]\d+))/gim
+            rollDetailed=rollResult.toString()
             //处理后续骰子
+            let regexAddDices = /((\+(\d+)*d(\d+))|([+-]\d+))/gim
             command.match(regexAddDices)?.forEach(element => {
                 if (element.match(/^\+(\d+)$/im)){
-                    rollResult = rollResult + Number(element.match(/^\+(\d+)$/im)?.groups?.[0])
-                    rollDetailed = rollDetailed + "+" + element.match(/^\+(\d+)$/im)?.groups?.[0]
+                    rollResult = rollResult + Number(element.match(/^\+(\d+)$/im)?.[1])
+                    rollDetailed = rollDetailed + "+" + element.match(/^\+(\d+)$/im)?.[1]
                 }else if(element.match(/^-(\d+)$/im)){
-                    rollResult = rollResult - Number(element.match(/^-(\d+)$/im)?.groups?.[0])
-                    rollDetailed = rollDetailed + "-" + element.match(/^-(\d+)$/im)?.groups?.[0]
+                    rollResult = rollResult - Number(element.match(/^-(\d+)$/im)?.[1])
+                    rollDetailed = rollDetailed + "-" + element.match(/^-(\d+)$/im)?.[1]
                 }else{
                     let addDiceresult=element.match(/(?<number>\d+)*d(?<faces>\d+)/im)
                     let number = addDiceresult?.groups?.number?Number(addDiceresult?.groups?.number):1
@@ -55,6 +56,8 @@ class DndDice implements IDice{
                         rollDetailed = rollDetailed + "+" + String(roll)
                     }
                 }
+                console.log("rollResult:"+rollResult)
+                console.log("roolDetailed"+rollDetailed)
             });
             sender(name + "在" + timeString + "进行了一次"+comment+"检定:\n" + command + ": " + rollResult + "\n详细:" + rollDetailed )
         }
