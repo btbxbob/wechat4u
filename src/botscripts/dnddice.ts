@@ -32,15 +32,17 @@ class DndDice implements IDice{
             let firstdice = regexCommand.exec(command)?.groups?.firstdice
             let firstdiceresult=firstdice?.match(/(?<number>\d+)*d(?<faces>\d+)/im)
             let number = firstdiceresult?.groups?.number?Number(firstdiceresult?.groups?.number):1;
+            rollDetailed="("
             for(let i=0;i<number;i++){
                 let roll:number = this.roll(Number(firstdiceresult?.groups?.faces))
                 rollResult = rollResult+roll
-                
+                rollDetailed += "+" +roll.toString()
             }
-            rollDetailed=rollResult.toString()
+            rollDetailed+=")"
             //处理后续骰子
             let regexAddDices = /((\+(\d+)*d(\d+))|([+-]\d+))/gim
             command.match(regexAddDices)?.forEach(element => {
+                rollDetailed+="+("
                 if (element.match(/^\+(\d+)$/im)){
                     rollResult = rollResult + Number(element.match(/^\+(\d+)$/im)?.[1])
                     rollDetailed = rollDetailed + "+" + element.match(/^\+(\d+)$/im)?.[1]
@@ -56,8 +58,7 @@ class DndDice implements IDice{
                         rollDetailed = rollDetailed + "+" + String(roll)
                     }
                 }
-                console.log("rollResult:"+rollResult)
-                console.log("roolDetailed"+rollDetailed)
+                rollDetailed+=")"
             });
             sender(name + "在" + timeString + "进行了一次"+comment+"检定:\n" + command + ": " + rollResult + "\n详细:" + rollDetailed )
         }
